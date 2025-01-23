@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- پیکربندی اپندر برای کنسول -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- الگوی نمایش لاگ‌ها -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- پیکربندی سطح لاگ برای ریشه (root) -->
+    <root level="INFO">
+        <!-- ارجاع به اپندر کنسول -->
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- پیکربندی سطح لاگ برای پکیج‌های خاص -->
+    <logger name="com.broker" level="DEBUG"/>
+
+</configuration>

@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword    # رمز عبور روت دیتابیس
+      MYSQL_DATABASE: broker_db           # نام دیتابیس
+      MYSQL_USER: user                    # نام کاربری
+      MYSQL_PASSWORD: userpassword        # رمز عبور کاربر
+    ports:
+      - "3306:3306"                       # پورت برای دسترسی به دیتابیس
+    volumes:
+      - mysql-data:/var/lib/mysql         # برای ذخیره‌سازی داده‌ها
+    networks:
+      - broker-network
+
+  # اگر نیاز دارید سرویس‌های دیگر هم داشته باشید، اینجا می‌توانید اضافه کنید
+
+networks:
+  broker-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
