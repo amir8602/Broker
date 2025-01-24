@@ -11,7 +11,7 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
 
-    List<Order> findByActionInAndTypeInAndStatusIn(List<OrderAction> actions, List<OrderType> types, List<OrderStatus> statuses);
+    List<Order> findByActionInAndTypeInAndStatusInOrderByIdDesc(List<OrderAction> actions, List<OrderType> types, List<OrderStatus> statuses);
 
 
 }

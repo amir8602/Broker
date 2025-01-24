@@ -1,5 +1,6 @@
 package com.broker.service.impl;
 
+import com.broker.repo.dao.OfferRepository;
 import com.broker.repo.dao.OrderRepository;
 import com.broker.repo.entity.Order;
 import com.broker.repo.enums.OrderAction;
@@ -10,6 +11,7 @@ import com.broker.service.OrderService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -25,6 +27,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private OfferRepository offerRepository;
+
     // ثبت سفارش جدید
     @Transactional
     @Override
@@ -39,7 +44,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllOrders(OrderSearchRequest request) {
         if (request.getSearchOption().isEmpty()) {
-            return orderRepository.findAll();
+            List<Order> createdAt = orderRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+            return createdAt.stream().filter(order -> order.getStatus() == OrderStatus.ACTIVE).toList();
+//            for (Order order : createdAt) {
+//                List<Offer> allByTofMali = offerRepository.findAllByTofMali(order.getId());
+//                order.setOffers(allByTofMali);
+//            }
+//            return createdAt;
         } else {
             List<Integer> searchOption = request.getSearchOption();
             List<OrderAction> actions = new ArrayList<>();
@@ -64,8 +75,6 @@ public class OrderServiceImpl implements OrderService {
                 types.remove(OrderType.COIN);
             }
             if (searchOption.contains(1) && searchOption.contains(2)){
-                actions.add(OrderAction.BUY);
-                actions.add(OrderAction.SELL);
                 types.add(OrderType.COIN);
                 types.add(OrderType.TAMAM);
                 types.add(OrderType.ROB);
@@ -85,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
 
             statuses.add(OrderStatus.ACTIVE);
 
-            return orderRepository.findByActionInAndTypeInAndStatusIn(actions, types, statuses);
+            return orderRepository.findByActionInAndTypeInAndStatusInOrderByIdDesc(actions, types, statuses);
 
         }
     }
@@ -108,6 +117,11 @@ public class OrderServiceImpl implements OrderService {
             return orderRepository.save(updatedOrder);
         }
         return null;  // اگر سفارش پیدا نشد
+    }
+
+    @Override
+    public void update(Order order) {
+        orderRepository.save(order);
     }
 
     public OrderRepository getOrderRepository() {

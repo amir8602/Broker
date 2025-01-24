@@ -19,4 +19,6 @@ public interface OrderService {
 
     // به‌روزرسانی وضعیت سفارش
     Order updateOrderStatus(Long orderId, OrderStatus status);
+
+    void update(Order order);
 }

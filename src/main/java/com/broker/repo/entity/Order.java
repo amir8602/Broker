@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -43,8 +41,10 @@ public class Order {
 
     private Long updatedAt = Instant.now().toEpochMilli();
 
-    @OneToMany(mappedBy = "order")
-    private List<Offer> offers = new ArrayList<>();
+//    @OneToMany(mappedBy = "order")
+//    private List<Offer> offers = new ArrayList<>();
+
+    private String userId;
 
     public OrderType getType() {
         return type;
@@ -116,5 +116,21 @@ public class Order {
 
     public void setTotalAmount(Long totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+//    public List<Offer> getOffers() {
+//        return offers;
+//    }
+//
+//    public void setOffers(List<Offer> offers) {
+//        this.offers = offers;
+//    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
